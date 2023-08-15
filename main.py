@@ -1,25 +1,18 @@
 import pymongo
+import pandas as pd
 
 # Provide the mongodb localhost url to connect python to mongodb.
-client = pymongo.MongoClient("mongodb://localhost:27017/neurolabDB")
+client = pymongo.MongoClient("mongodb+srv://sakethchoudary227:Skqgi9782@cluster0.v079hz2.mongodb.net/?retryWrites=true&w=majority")
 
 # Database Name
-dataBase = client["neurolabDB"]
+dataBase = client["store_sales"]
 
 # Collection  Name
-collection = dataBase['Products']
-
-# Sample data
-d = {'companyName': 'iNeuron',
-     'product': 'Affordable AI',
-     'courseOffered': 'Machine Learning with Deployment'}
-
-# Insert above records in the collection
-rec = collection.insert_one(d)
+collection = dataBase['train']
 
 # Lets Verify all the record at once present in the record with all the fields
-all_record = collection.find()
+data = pd.DataFrame(list(i for i in collection.find()))
+data.drop('_id',axis=1,inplace=True)
+data.to_csv("base data.csv")
 
-# Printing all records present in the collection
-for idx, record in enumerate(all_record):
-     print(f"{idx}: {record}")
+
